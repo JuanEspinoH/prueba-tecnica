@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask, request, jsonify
 from models import db,Usuario
 from flask_migrate import Migrate
@@ -6,7 +7,6 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager,jwt_required
-
 load_dotenv()
 
 app=Flask(__name__)
@@ -32,6 +32,77 @@ def hello_world():
     db.session.add(newUser)
     db.session.commit()  
     return jsonify({"test":"pruebas"}),200
+
+@app.route("/register",methods=["POST"])
+def register():
+    try:
+        data=request.get_json()
+        username=data.get("username")
+        email=data.get("email")
+        password=data.get("password")
+        # Validaciones, si existe el campo,el tipo sea string, la longitud y si el email tiene formato correcto  
+        if username is None  or username == "":
+            return jsonify({
+                "msg":"Falta el nombre de usuario"
+            }),400
+        elif type(username) != str:
+            return jsonify({
+                "msg":"El nombre debe de ser texto"
+            }),400
+        elif len(username) > 15:
+            return jsonify({
+                "msg":"El nombre de usuario no debe de ser mayor a 15 caracteres"
+            }),400
+        
+        if email is None  or email == "":
+            return jsonify({
+                "msg":"Falta el correo electronico"
+            }),400
+        elif type(email) != str:
+            return jsonify({
+                "msg":"El email no debe de ser texto"
+            }),400
+        elif len(email) > 20:
+            return jsonify({
+                "msg":"El email no debe de ser mayor a 20 caracteres"
+            }),400
+        elif bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$',email )) ==False:
+            return jsonify({
+                "msg":"Formato de email no valido"
+                
+            }),400
+        
+        if password is None  or password == "":
+            return jsonify({
+                "msg":"Falta la contraseña"
+            }),400
+        elif type(password) != str:
+            return jsonify({
+                "msg":"La contraseña no debe de ser texto"
+            }),400
+        
+        revisarEmail=Usuario.query.filter(Usuario.email==email).first()
+        if revisarEmail != None:
+            return jsonify({
+                "msg":"Email ya registrado"
+            }),400
+        
+        # hasheasr contraseña
+        contra_hasheada=bcrypt.generate_password_hash(password).decode("utf-8")
+
+        nuevoUsuario=Usuario(username=username,email=email,password=contra_hasheada)
+        db.session.add(nuevoUsuario)
+        db.session.commit()
+
+        return jsonify({"msg":"Se creo el usuario correctamente",
+                        "data":nuevoUsuario.serialize()}),200
+    except Exception as e:
+        return jsonify({
+            "msg":str(e)
+        }),400
+    
+
+
 
 
 if __name__ == '__main__':
