@@ -1,18 +1,21 @@
 import os
 import re
+from datetime import timedelta
 from flask import Flask, request, jsonify
 from models import db,Usuario
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager,jwt_required
+from flask_jwt_extended import  JWTManager,create_access_token, jwt_required, get_jwt_identity
 load_dotenv()
 
 app=Flask(__name__)
 CORS(app)
-jwt = JWTManager() 
-bcrypt = Bcrypt()  
+jwt = JWTManager(app) 
+bcrypt = Bcrypt(app)  
+
+app.config["JWT_SECRET_KEY"]=os.getenv('FLASK_APP_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] =  os.getenv("CONNECTION_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
@@ -102,7 +105,92 @@ def register():
         }),400
     
 
+@app.route("/login",methods=["POST"])
+def login():
+    try:
+        data=request.get_json()
+        password=data.get("password")
+        email=data.get("email")
 
+        if email is None  or email == "":
+                return jsonify({
+                    "msg":"Falta el correo electronico"
+                }),400
+        elif type(email) != str:
+                return jsonify({
+                    "msg":"El email no debe de ser texto"
+                }),400
+        elif len(email) > 20:
+                return jsonify({
+                    "msg":"El email no debe de ser mayor a 20 caracteres"
+                }),400
+        elif bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$',email )) ==False:
+                return jsonify({
+                    "msg":"Formato de email no valido"
+                    
+                }),400
+            
+        if password is None  or password == "":
+                return jsonify({
+                    "msg":"Falta la contraseña"
+                }),400
+        elif type(password) != str:
+                return jsonify({
+                    "msg":"La contraseña no debe de ser texto"
+                }),400   
+        if email is None  or email == "":
+                return jsonify({
+                    "msg":"Falta el correo electronico"
+                }),400
+        elif type(email) != str:
+                return jsonify({
+                    "msg":"El email no debe de ser texto"
+                }),400
+        elif len(email) > 20:
+                return jsonify({
+                    "msg":"El email no debe de ser mayor a 20 caracteres"
+                }),400
+        elif bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$',email )) ==False:
+                return jsonify({
+                    "msg":"Formato de email no valido"
+                    
+                }),400
+            
+        if password is None  or password == "":
+                return jsonify({
+                    "msg":"Falta la contraseña"
+                }),400
+        elif type(password) != str:
+                return jsonify({
+                    "msg":"La contraseña no debe de ser texto"
+                }),400
+
+        revisarEmail=Usuario.query.filter_by(email=email).first()
+        if not revisarEmail:
+              return jsonify({
+                    "msg":"Email no registrado"
+              }),400
+        
+        contra_hash=revisarEmail.password
+        es_valido=bcrypt.check_password_hash(contra_hash,password)
+        print(es_valido)
+
+        if es_valido:
+            expires=timedelta(days=1)
+            token=create_access_token(identity=str(revisarEmail.id),expires_delta=expires)
+            return jsonify({
+                 "msg":"Inicio de sesion exitosa",
+                 "data":revisarEmail.serialize(),
+                 "token":token
+            }),200
+        else:
+            return jsonify({
+                  "msg":"Constraseña incorrecta"
+            }),400
+    except Exception as e:
+        return jsonify({
+            "msg":str(e)
+        })
 
 
 if __name__ == '__main__':
