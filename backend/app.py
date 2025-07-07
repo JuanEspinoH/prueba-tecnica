@@ -2,7 +2,7 @@ import os
 import re
 from datetime import timedelta
 from flask import Flask, request, jsonify
-from models import db,Usuario
+from models import db,Usuario,Tarea
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -190,6 +190,170 @@ def selfInfo():
         return jsonify({
             "error":str(e)
         }),400
+
+@app.route("/tasks",methods=["GET"])
+@jwt_required()
+def get_tasks():
+    try:
+        user_id=get_jwt_identity()
+
+        usuario=Usuario.query.filter_by(id=user_id).first()
+
+        if usuario ==None:
+            return jsonify({
+                "msg":"Usuario no encontrado"
+            }),400
+            
+        
+        tareas=Tarea.query.filter_by(user_id=user_id).all()
+        if not tareas:
+            return jsonify({
+                "msg": "No hay tareas creadas",
+                "data": []
+            }), 200
+        
+        tareas_data = [tarea.serialize() for tarea in tareas]
+        
+        return jsonify({
+            "msg": "Tareas obtenidas correctamente",
+            "data": tareas_data
+        }), 200
+
+
+
+
+        print(tareas)
+
+        return jsonify({
+            "msg":"lista "
+            # "data":tareaNueva.serialize()
+        }),200
+    
+    except Exception as e:
+        return jsonify({
+            "msg":str(e)
+        })
+
+@app.route("/tasks",methods=["POST"])
+@jwt_required()
+def add_task():
+    try:
+        user_id=get_jwt_identity()
+        data=request.get_json()
+        label=data.get("label")
+
+        usuario=Usuario.query.filter_by(id=user_id).first()
+
+        if usuario ==None:
+            return jsonify({
+                "msg":"Usuario no encontrado"
+            }),400
+
+        if type(label) !=str:
+            return jsonify({
+                "msg":"El mensaje debe de ser texto"
+            }),400
+        if label is None  or label == "":
+            return jsonify({
+                "msg":"El mensaje no debe de estar vacio"
+            }),400
+        
+        tareaNueva=Tarea(label=label,user_id=user_id)
+
+        db.session.add(tareaNueva)
+        db.session.commit()
+        print(tareaNueva.serialize())
+
+        return jsonify({
+            "msg":"Tarea creada correctamente",
+            "data":tareaNueva.serialize()
+        }),200
+    
+    except Exception as e:
+        return jsonify({
+            "msg":str(e)
+        })
+  
+
+@app.route("/tasks",methods=["PUT"])
+@jwt_required()
+def put_task():
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        label = data.get("label")
+        completed=data.get("completed")
+        task_id=data.get("id")
+        usuario = Usuario.query.filter_by(id=user_id).first()
+        
+        if usuario is None:
+            return jsonify({
+                "msg": "Usuario no encontrado"
+            }), 400
+        
+        tarea = Tarea.query.filter_by(id=task_id, user_id=user_id).first()
+
+        if tarea is None:
+            return jsonify({
+                "msg": "Tarea no encontrada"
+            }), 400
+        
+        if type(label) != str:
+            return jsonify({
+                "msg": "El mensaje debe de ser texto"
+            }), 400
+        
+        if label is None or label == "":
+            return jsonify({
+                "msg": "El mensaje no debe de estar vacio"
+            }), 400
+    
+        tarea.label = label
+        tarea.completed=completed
+        db.session.commit()
+        
+        return jsonify({
+            "msg": "Tarea actualizada correctamente",
+            "data": tarea.serialize()
+        }), 200
+    
+    except Exception as e:
+        return jsonify({
+            "msg": str(e)
+        }), 400
+
+
+@app.route("/tasks",methods=["DELETE"])
+@jwt_required()
+def del_task():
+    try:
+        data=request.get_json()
+        user_id = get_jwt_identity()
+        task_id=data.get("id")
+        usuario = Usuario.query.filter_by(id=user_id).first()
+        
+        if usuario is None:
+            return jsonify({
+                "msg": "Usuario no encontrado"
+            }), 400
+        
+        tarea = Tarea.query.filter_by(id=task_id, user_id=user_id).first()
+        if tarea is None:
+            return jsonify({
+                "msg": "Tarea no encontrada"
+            }), 400
+        
+        db.session.delete(tarea)
+        db.session.commit()
+        
+        return jsonify({
+            "msg": "Tarea eliminada correctamente"
+        }), 200
+    
+    except Exception as e:
+        return jsonify({
+            "msg": str(e)
+        }), 400
 
 if __name__ == '__main__':
     app.run()
