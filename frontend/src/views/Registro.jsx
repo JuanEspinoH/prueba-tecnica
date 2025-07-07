@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Registro = () => {
   const navigate = useNavigate()
-  const { store, actions } = useGlobalStore()
+  const { _, actions } = useGlobalStore()
   const [loading, setLoading] = useState(false)
   const [redirect, setRedirect] = useState(false)
   const [redirectHome, setRedirectHome] = useState(false)
@@ -39,7 +39,6 @@ const Registro = () => {
     actions
       .registroUsuario(formInfo)
       .then((res) => {
-        actions.modificarCurrentUser(res.data)
         setSuccess(`${res.msg} , redireccionando a Iniciar sesion`)
         setRedirectHome(true)
         setRedirect((prev) => !prev)
