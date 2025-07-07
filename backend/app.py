@@ -31,9 +31,7 @@ with app.app_context():
 
 @app.route("/")
 def hello_world():
-    newUser=Usuario()
-    db.session.add(newUser)
-    db.session.commit()  
+
     return jsonify({"test":"pruebas"}),200
 
 @app.route("/register",methods=["POST"])
@@ -111,24 +109,6 @@ def login():
         data=request.get_json()
         password=data.get("password")
         email=data.get("email")
-
-        if email is None  or email == "":
-                return jsonify({
-                    "msg":"Falta el correo electronico"
-                }),400
-        elif type(email) != str:
-                return jsonify({
-                    "msg":"El email no debe de ser texto"
-                }),400
-        elif len(email) > 20:
-                return jsonify({
-                    "msg":"El email no debe de ser mayor a 20 caracteres"
-                }),400
-        elif bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$',email )) ==False:
-                return jsonify({
-                    "msg":"Formato de email no valido"
-                    
-                }),400
             
         if password is None  or password == "":
                 return jsonify({
@@ -173,7 +153,6 @@ def login():
         
         contra_hash=revisarEmail.password
         es_valido=bcrypt.check_password_hash(contra_hash,password)
-        print(es_valido)
 
         if es_valido:
             expires=timedelta(days=1)
@@ -192,6 +171,25 @@ def login():
             "msg":str(e)
         })
 
+@app.route("/self",methods=["GET"])
+@jwt_required()
+def selfInfo():
+    try:
+        user_id=get_jwt_identity()
+
+        userInfo=Usuario.query.filter_by(id=user_id).first()
+
+        if userInfo == None:
+            return jsonify({
+                "msg":"No encontrado"
+            }),400
+
+        return jsonify(userInfo.serialize()),200
+    
+    except Exception as e:
+        return jsonify({
+            "error":str(e)
+        }),400
 
 if __name__ == '__main__':
     app.run()
