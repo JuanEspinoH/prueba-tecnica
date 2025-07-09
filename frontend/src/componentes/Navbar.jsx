@@ -10,9 +10,14 @@ const Navbar = () => {
     navigate('/inicio-sesion')
   }
   return (
-    <nav>
-      <p>{store.currentUser.username}</p>
-      <button onClick={() => handleLogOut()}>Log out</button>
+    <nav className="w-full flex justify-between items-center bg-blue-900 py-3 px-4 ">
+      <p className="text-white text-3xl">{`Tareas de ${store.currentUser.username}`}</p>
+      <button
+        className="bg-white text-blue-900 p-3"
+        onClick={() => handleLogOut()}
+      >
+        Log out
+      </button>
     </nav>
   )
 }
