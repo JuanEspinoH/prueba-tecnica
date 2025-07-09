@@ -219,16 +219,6 @@ def get_tasks():
             "data": tareas_data
         }), 200
 
-
-
-
-        print(tareas)
-
-        return jsonify({
-            "msg":"lista "
-            # "data":tareaNueva.serialize()
-        }),200
-    
     except Exception as e:
         return jsonify({
             "msg":str(e)
@@ -310,6 +300,9 @@ def put_task():
     
         tarea.label = label
         tarea.completed=completed
+        print(label)
+        print(completed)
+        print(tarea)
         db.session.commit()
         
         return jsonify({

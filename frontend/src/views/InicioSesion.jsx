@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useGlobalStore from '../context/useGlobalStore'
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate, Link } from 'react-router-dom'
+import Spinner from '../componentes/Spinner'
 const Registro = () => {
   const navigate = useNavigate()
   const { _, actions } = useGlobalStore()
@@ -37,16 +37,31 @@ const Registro = () => {
   }
 
   if (loading) {
-    return <h1>Cargando</h1>
+    return (
+      <div className=" w-full h-[100vh] flex items-center justify-center flex-col gap-3">
+        <Spinner />
+        <p className="text-3xl font-bold text-blue-700">Iniciando sesion</p>
+      </div>
+    )
   }
 
   return (
-    <div>
-      Iniciar Sesion
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
+    <div className=" w-full h-[100vh] flex items-center justify-center flex-col gap-3">
+      <h1 className="text-6xl text-blue-600">Tareas React-Flask</h1>
+      <h3 className="text-4xl">Iniciar Sesion</h3>
+
+      <form
+        onSubmit={handleSubmit}
+        className="border-1 border-gray-400 w-3/6 shadow-[0px_8px_0px_0px_rgba(0,_0,_0,_0.2)] h-auto 
+        flex items-center justify-center flex-col gap-3
+        px-5 py-7 rounded-3xl"
+      >
+        <div className="w-full">
+          <label className="text-3xl   " htmlFor="email">
+            Email:
+          </label>
           <input
+            className="w-full my-3 text-2xl border-2 rounded-md border-blue-400"
             id="email"
             type="text"
             name="email"
@@ -54,9 +69,12 @@ const Registro = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label htmlFor="password">Contraseña</label>
+        <div className="w-full my-3 text-2xl">
+          <label className="text-3xl  " htmlFor="password">
+            Contraseña:
+          </label>
           <input
+            className="w-full border-2 rounded-md border-blue-400"
             id="password"
             type="text"
             name="password"
@@ -64,9 +82,19 @@ const Registro = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">Submit</button>
+        <button
+          className="text-2xl text-center w-full bg-blue-500 p-1.5 text-white"
+          type="submit"
+        >
+          Submit
+        </button>
+
+        <div>
+          <Link to={'/registro'} className="underline text-blue-700 font-bold">
+            ¿No tienes cuenta ? Crea una aqui.
+          </Link>
+        </div>
       </form>
-      {error && <h3>{error}</h3>}
     </div>
   )
 }
