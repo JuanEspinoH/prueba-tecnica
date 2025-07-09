@@ -34,7 +34,6 @@ const Registro = () => {
   }, [redirect])
 
   const handleSubmit = (e) => {
-    setError('')
     e.preventDefault()
     setLoading(true)
     actions

@@ -6,7 +6,7 @@ const Registro = () => {
   const navigate = useNavigate()
   const { _, actions } = useGlobalStore()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [__, setError] = useState('')
   const [formInfo, setFormInfo] = useState({
     email: '',
     password: '',
