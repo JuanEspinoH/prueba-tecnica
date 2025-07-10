@@ -130,12 +130,19 @@ const Registro = () => {
         >
           Submit
         </button>
-        <div>
+        <div className="w-full flex sm:flex-row gap-2 flex-col items-center justify-between">
           <Link
             to={'/inicio-sesion'}
-            className="underline text-blue-700 font-bold"
+            className="text-sm w-full sm:w-1/2 underline text-center  text-blue-700 font-bold"
           >
             ¿Ya tienes cuenta ? Inicia sesion.
+          </Link>
+          <Link
+            to={'/recuperar-password'}
+            className="underline text-sm sm:w-1/2 w-full text-center text-blue-700  font-bold"
+          >
+            ¿Olvidaste tu contraseña ? Recuperala{' '}
+            <span className="font-bold"> aqui.</span>
           </Link>
         </div>
       </form>

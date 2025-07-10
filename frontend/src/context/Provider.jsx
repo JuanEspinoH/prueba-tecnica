@@ -185,6 +185,72 @@ export const GlobalStoreaProvider = ({ children }) => {
       throw new Error(error.msg)
     }
   }
+  const recuperarContra = async (body) => {
+    try {
+      const response = await fetch(
+        'http://localhost:3000/recuperar-contraseña',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+      )
+      if (!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+      const data = await response.json()
+      return data
+    } catch (error) {
+      throw new Error(error.msg)
+    }
+  }
+  const reescribirContraCheck = async (body) => {
+    try {
+      const response = await fetch(
+        'http://localhost:3000/reescribir-contraseña',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+      )
+      if (!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+      const data = await response.json()
+      return data
+    } catch (error) {
+      throw new Error(error.msg)
+    }
+  }
+  const reescribirContraForm = async (body) => {
+    try {
+      const response = await fetch(
+        'http://localhost:3000/reescribir-contraseña-form',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+      )
+      if (!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+      const data = await response.json()
+      return data
+    } catch (error) {
+      throw new Error(error.msg)
+    }
+  }
 
   const store = {
     store: { currentUser, globalLoading },
@@ -198,6 +264,9 @@ export const GlobalStoreaProvider = ({ children }) => {
       addTask,
       editTask,
       deleteTask,
+      recuperarContra,
+      reescribirContraCheck,
+      reescribirContraForm,
     },
   }
 

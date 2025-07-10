@@ -7,6 +7,8 @@ import Home from './views/Home'
 import InicioSesion from './views/InicioSesion'
 import Registro from './views/Registro'
 import NotFound from './views/NotFound'
+import RecuperarContraseña from './views/RecuperarContraseña'
+import ReescribirContraseña from './views/ReescribirContraseña'
 
 const App = () => {
   return (
@@ -17,6 +19,14 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/inicio-sesion" element={<InicioSesion />} />
+            <Route
+              path="/recuperar-password"
+              element={<RecuperarContraseña />}
+            />
+            <Route
+              path="/reescribir-password/:tokenId"
+              element={<ReescribirContraseña />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
