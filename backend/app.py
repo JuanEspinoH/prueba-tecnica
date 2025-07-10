@@ -1,5 +1,6 @@
 import os
 import re
+import uuid
 from datetime import timedelta
 from flask import Flask, request, jsonify
 from models import db,Usuario,Tarea
@@ -8,6 +9,7 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from flask_jwt_extended import  JWTManager,create_access_token, jwt_required, get_jwt_identity
+from flask_mail import Mail,Message
 load_dotenv()
 
 app=Flask(__name__)
@@ -15,11 +17,20 @@ CORS(app)
 jwt = JWTManager(app) 
 bcrypt = Bcrypt(app)  
 
+
 app.config["JWT_SECRET_KEY"]=os.getenv('FLASK_APP_KEY')
 
 app.config['SQLALCHEMY_DATABASE_URI'] =  os.getenv("CONNECTION_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 
+app.config['MAIL_SERVER'] =  os.getenv("MAIL_SERVER")
+app.config['MAIL_PORT'] =  os.getenv("MAIL_PORT")
+app.config['MAIL_USERNAME'] =  os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] =  os.getenv("MAIL_PASSWORD")
+app.config['MAIL_USE_TLS'] =  False
+app.config['MAIL_USE_SSL'] =  True
+
+mail=Mail(app)
 db.init_app(app)
 
 migrate = Migrate(app, db)
@@ -347,6 +358,122 @@ def del_task():
         return jsonify({
             "msg": str(e)
         }), 400
+
+@app.route("/recuperar-contraseña",methods=["POST"])
+def recuperacion():
+    try:
+        data =request.get_json()
+        email=data.get("email")
+
+        usuario=Usuario.query.filter_by(email=email).first()
+ 
+        if usuario is None:
+            return jsonify({
+                "msg":"Correo no registrado"
+            }),400
+        
+        if email is None  or email == "":
+            return jsonify({
+                "msg":"Falta el correo electronico"
+            }),400
+        elif type(email) != str:
+            return jsonify({
+                "msg":"El email no debe de ser texto"
+            }),400
+        elif len(email) > 20:
+            return jsonify({
+                "msg":"El email no debe de ser mayor a 20 caracteres"
+            }),400
+        elif bool(re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$',email )) ==False:
+            return jsonify({
+                "msg":"Formato de email no valido"
+                
+            }),400
+        
+    
+        token_id=str(uuid.uuid4())
+
+        token_repetido=Usuario.query.filter_by(token=token_id).all()
+
+        
+        if len(token_repetido) != 0:
+            print("nada")
+        
+        usuario.token=token_id
+        db.session.commit()
+        
+        msg=Message("Recuperer contraseña.",sender=os.getenv("MAIL_USERNAME"),recipients=[usuario.serialize()["email"]])
+        msg.body=f"Este es el link para recuperar la contraseña: http://localhost:5173/reescribir-password/{token_id}"
+        mail.send(msg)
+        
+        return jsonify({
+            "msg":"Correo enviado correctamente"
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "msg": str(e)
+        }), 400
+    
+@app.route("/reescribir-contraseña",methods=["POST"])
+def reescribir_check():
+    try:
+        data =request.get_json()
+        token=data.get("token")
+
+        check_token=Usuario.query.filter_by(token=token).first()
+
+        if check_token is None:
+            return jsonify({
+                "msg":"No se ha enviado correo de recuperacion de contraseña"
+            }),400
+        
+        return jsonify({
+            "data":True
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "msg": str(e)
+        }), 400
+    
+@app.route("/reescribir-contraseña-form",methods=["POST"])
+def reescribir_form():
+    try:
+
+        data =request.get_json()
+        token=data.get("token")
+        new_password=data.get("password")
+
+        ususario=Usuario.query.filter_by(token=token).first()
+        if new_password is None  or new_password == "":
+            return jsonify({
+                "msg":"Falta la contraseña"
+            }),400
+        elif type(new_password) != str:
+            return jsonify({
+                "msg":"La contraseña no debe de ser texto"
+            }),400
+
+        if ususario is None:
+            return jsonify({
+                "msg":"No se ha enviado correo de recuperacion de contraseña"
+            }),400
+        
+        contra_hasheada=bcrypt.generate_password_hash(new_password).decode("utf-8")
+        ususario.password=contra_hasheada
+        ususario.token=""
+        db.session.commit()
+
+        return jsonify({
+            "msg":"Contraseña actucalizada correctamente"
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "msg": str(e)
+        }), 400
+    
 
 if __name__ == '__main__':
     app.run()
