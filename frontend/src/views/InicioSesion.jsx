@@ -89,9 +89,19 @@ const Registro = () => {
           Submit
         </button>
 
-        <div>
-          <Link to={'/registro'} className="underline text-blue-700 font-bold">
+        <div className="w-full flex items-center justify-between">
+          <Link
+            to={'/registro'}
+            className="text-sm underline text-blue-700 font-bold"
+          >
             ¿No tienes cuenta ? Crea una aqui.
+          </Link>
+          <Link
+            to={'/recuperar-password'}
+            className="underline text-sm text-blue-700 font-bold"
+          >
+            ¿Olvidaste tu contraseña ? Recuperala{' '}
+            <span className="font-bold"> aqui.</span>
           </Link>
         </div>
       </form>
