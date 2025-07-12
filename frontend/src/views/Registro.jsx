@@ -27,7 +27,7 @@ const Registro = () => {
     if (redirectHome === true) {
       const timerRedirect = setTimeout(() => {
         navigate('/inicio-sesion')
-      }, 3000)
+      }, 1800)
 
       return () => clearTimeout(timerRedirect)
     }
@@ -69,11 +69,11 @@ const Registro = () => {
     return (
       <div
         className="
-      bg-gradient-to-r from-indigo-400 to-cyan-400
+       bg-gradient-to-r from-indigo-400 to-cyan-400
       w-full h-[100vh] flex items-center justify-center flex-col gap-3"
       >
         <Spinner />
-        <p className="text-3xl font-bold text-blue-700">Creando usuario</p>
+        <p className="text-3xl font-bold text-white">Cargando</p>
       </div>
     )
   }
@@ -82,21 +82,26 @@ const Registro = () => {
     <div
       className="
     bg-gradient-to-r from-indigo-400 to-cyan-400
-    w-full h-[100vh] flex items-center justify-center flex-col gap-3"
+    w-full h-auto min-h-[100vh] pb-6 flex items-center justify-center flex-col gap-3"
     >
-      <h1 className="text-6xl font-extrabold text-white">Tareas React-Flask</h1>
-      <h3 className="text-4xl">Registra tu cuenta</h3>
+      <h1 className="text-4xl  sm:text-5xl  md:text-6xl font-extrabold text-white">
+        Tareas React-Flask
+      </h1>
+      <h3 className="text-3xl sm:text-4xl md:text-5xl ">Registra tu cuenta</h3>
 
       <form
         onSubmit={handleSubmit}
         className="
         isolate    rounded-xl bg-white/60 shadow-lg ring-1 ring-black/5
-        border-1 border-gray-400 w-3/6  h-auto 
+        border-1 border-gray-400 w-5/6 sm:w-4/6  h-auto 
         flex items-center justify-center flex-col gap-3
         px-5 py-7 "
       >
         <div className="w-full">
-          <label className="text-3xl   " htmlFor="username">
+          <label
+            className="text-2xl sm:text-3xl md:text-4xl  "
+            htmlFor="username"
+          >
             Nombre de usuario
           </label>
           <input
@@ -109,7 +114,10 @@ const Registro = () => {
           />
         </div>
         <div className="w-full">
-          <label className="text-3xl   " htmlFor="email">
+          <label
+            className="text-2xl sm:text-3xl md:text-4xl    "
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -122,7 +130,10 @@ const Registro = () => {
           />
         </div>
         <div className="w-full">
-          <label className="text-3xl   " htmlFor="password">
+          <label
+            className="text-2xl sm:text-3xl md:text-4xl    "
+            htmlFor="password"
+          >
             Contraseña
           </label>
           <input
@@ -138,18 +149,18 @@ const Registro = () => {
           className="text-2xl text-center w-full bg-blue-500 p-1.5 text-white cursor-pointer"
           type="submit"
         >
-          Submit
+          Registro
         </button>
         <div className="w-full flex sm:flex-row gap-2 flex-col items-center justify-between">
           <Link
             to={'/inicio-sesion'}
-            className="text-sm w-full sm:w-1/2 underline text-center  text-blue-700 font-bold"
+            className="sm:text-sm text-xs w-full sm:w-1/2 underline text-center  text-blue-700 font-bold"
           >
             ¿Ya tienes cuenta ? Inicia sesion.
           </Link>
           <Link
             to={'/recuperar-password'}
-            className="underline text-sm sm:w-1/2 w-full text-center text-blue-700  font-bold"
+            className="underline sm:text-sm text-xs sm:w-1/2 w-full text-center text-blue-700  font-bold"
           >
             ¿Olvidaste tu contraseña ? Recuperala{' '}
             <span className="font-bold"> aqui.</span>

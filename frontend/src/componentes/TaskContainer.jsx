@@ -42,7 +42,7 @@ const TaskContainer = ({ id, label, completed, setTasks }) => {
     setLoading(true)
     actions
       .deleteTask({ id })
-      .then(async (res) => {
+      .then(async () => {
         const newTask = await actions.getTasks()
         setTasks(newTask.data)
       })
@@ -100,22 +100,22 @@ const TaskContainer = ({ id, label, completed, setTasks }) => {
         )}
       </div>
 
-      <div className="w-full flex group justify-between items-center">
+      <div className="w-full  flex group justify-between items-center">
         <button
           onClick={() => {
             handleChangeCompleted()
           }}
           className={
             completedData
-              ? 'w-3/12 rounded-sm p-1  bg-green-500 flex  justify-center items-center cursor-pointer'
-              : 'w-3/12 rounded-sm p-1  bg-gray-500 flex   justify-center items-center cursor-pointer '
+              ? 'w-3/12 rounded-sm p-1 border-2 border-gray-800 hover:border-black  bg-green-500 flex  justify-center items-center cursor-pointer'
+              : 'w-3/12 rounded-sm p-1 border-2 border-gray-800 hover:border-black  bg-gray-500 flex   justify-center items-center cursor-pointer '
           }
         >
           {completedData ? <CheckIcon /> : <CrossIcon />}
         </button>
         <button
           onClick={() => setEdit((prev) => !prev)}
-          className={`w-3/12 ${
+          className={`w-3/12  border-2 border-gray-800 hover:border-black ${
             edit ? 'bg-amber-800' : 'bg-amber-500'
           }  flex rounded-sm p-1  justify-center items-center cursor-pointer`}
         >
@@ -123,7 +123,7 @@ const TaskContainer = ({ id, label, completed, setTasks }) => {
         </button>
         <button
           onClick={() => handleDelete()}
-          className="w-3/12 bg-red-500 flex  justify-center rounded-sm p-1 items-center cursor-pointer"
+          className="w-3/12 bg-red-500 flex  border-2 border-gray-800 hover:border-black justify-center rounded-sm p-1 items-center cursor-pointer"
         >
           <DeleteIcon />
         </button>

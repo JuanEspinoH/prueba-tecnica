@@ -24,25 +24,41 @@ const RecuperarContraseña = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center flex-col w-full h-[100vh] gap-3">
+      <div
+        className="
+       bg-gradient-to-r from-indigo-400 to-cyan-400
+      w-full h-[100vh] flex items-center justify-center flex-col gap-3"
+      >
         <Spinner />
-        <h3 className="text-2xl text-blue-500">Esperando respuesta</h3>
+        <p className="text-3xl font-bold text-white">Cargando</p>
       </div>
     )
   }
 
   return (
-    <div className="flex justify-center items-center flex-col w-full h-[100vh] gap-3">
-      <h1 className="text-6xl text-blue-600">Tareas React-Flask</h1>
-      <h3 className="text-4xl">Recuperar contraseña</h3>
+    <div
+      className="
+    bg-gradient-to-r from-indigo-400 to-cyan-400
+    w-full h-auto min-h-[100vh] pb-6 flex items-center justify-center flex-col gap-3"
+    >
+      <h1 className="text-4xl  sm:text-5xl  md:text-6xl font-extrabold text-white">
+        Tareas React-Flask
+      </h1>
+      <h3 className="text-3xl sm:text-4xl md:text-5xl ">
+        Recuperar contraseña
+      </h3>
       <form
         onSubmit={handleSubmit}
-        className="border-1 border-gray-400 w-3/6 shadow-[0px_8px_0px_0px_rgba(0,_0,_0,_0.2)] h-auto 
-            flex items-center justify-center flex-col gap-3
-            px-5 py-7 rounded-3xl"
+        className=" isolate    rounded-xl bg-white/60 shadow-lg ring-1 ring-black/5
+        border-1 border-gray-400 w-5/6 sm:w-4/6  h-auto 
+        flex items-center justify-center flex-col gap-3
+        px-5 py-7"
       >
         <div className="w-full">
-          <label className="text-3xl   " htmlFor="email">
+          <label
+            className="text-2xl sm:text-3xl md:text-4xl    "
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -59,21 +75,20 @@ const RecuperarContraseña = () => {
           className="text-2xl text-center w-full bg-blue-500 p-1.5 text-white"
           type="submit"
         >
-          Submit
+          Recuperar contraseña
         </button>
         <div className="w-full flex sm:flex-row gap-2 flex-col items-center justify-between">
           <Link
             to={'/inicio-sesion'}
-            className="text-sm w-full sm:w-1/2 underline text-center  text-blue-700 font-bold"
+            className="sm:text-sm text-xs w-full sm:w-1/2 underline text-center  text-blue-700 font-bold"
           >
             ¿Ya tienes cuenta ? Inicia sesion.
           </Link>
           <Link
-            to={'/recuperar-password'}
-            className="underline text-sm sm:w-1/2 w-full text-center text-blue-700  font-bold"
+            to={'/registro'}
+            className="sm:text-sm text-xs w-full sm:w-1/2 text-center underline text-blue-700 font-bold"
           >
-            ¿Olvidaste tu contraseña ? Recuperala{' '}
-            <span className="font-bold"> aqui.</span>
+            ¿No tienes cuenta ? Crea una aqui.
           </Link>
         </div>
       </form>
