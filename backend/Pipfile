@@ -13,6 +13,7 @@ psycopg2 = "*"
 python-dotenv = "*"
 sqlalchemy = "*"
 flask-jwt-extended = "*"
+flask-mail = "*"
 
 [dev-packages]
 
