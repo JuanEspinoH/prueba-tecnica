@@ -2,10 +2,11 @@ import React from 'react'
 
 const CheckIcon = ({
   color = 'white',
-  bg = 'bg-green-500',
+  bg = 'bg-green-500 ',
   size = 'size-6',
+  hover = 'hover:bg-green-400',
 }) => {
-  const styleButton = `${color} ${bg} ${size}`
+  const styleButton = `${color} ${bg} ${size} ${hover}`
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

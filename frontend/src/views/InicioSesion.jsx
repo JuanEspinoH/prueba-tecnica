@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import useGlobalStore from '../context/useGlobalStore'
 import { useNavigate, Link } from 'react-router-dom'
 import Spinner from '../componentes/Spinner'
+import { toast } from 'react-hot-toast'
+
 const Registro = () => {
   const navigate = useNavigate()
   const { _, actions } = useGlobalStore()
@@ -29,7 +31,7 @@ const Registro = () => {
         navigate('/')
       })
       .catch((err) => {
-        setError(err.message)
+        toast.error(err.message)
       })
       .finally(() => {
         setLoading(false)
@@ -38,23 +40,33 @@ const Registro = () => {
 
   if (loading) {
     return (
-      <div className=" w-full h-[100vh] flex items-center justify-center flex-col gap-3">
+      <div
+        className="
+       bg-gradient-to-r from-indigo-400 to-cyan-400
+      w-full h-[100vh] flex items-center justify-center flex-col gap-3"
+      >
         <Spinner />
-        <p className="text-3xl font-bold text-blue-700">Iniciando sesion</p>
+        <p className="text-3xl font-bold text-white">Iniciando sesion</p>
       </div>
     )
   }
 
   return (
-    <div className=" w-full h-[100vh] flex items-center justify-center flex-col gap-3">
-      <h1 className="text-6xl text-blue-600">Tareas React-Flask</h1>
-      <h3 className="text-4xl">Iniciar Sesion</h3>
+    <div
+      className=" 
+    bg-gradient-to-r from-indigo-400 to-cyan-400
+    w-full h-[100vh] flex items-center justify-center flex-col gap-3"
+    >
+      <h1 className="text-6xl font-extrabold text-white">Tareas React-Flask</h1>
+      <h3 className="text-4xl ">Iniciar Sesion</h3>
 
       <form
         onSubmit={handleSubmit}
-        className="border-1 border-gray-400 w-3/6 shadow-[0px_8px_0px_0px_rgba(0,_0,_0,_0.2)] h-auto 
+        className="
+        isolate rounded-xl bg-white/60 shadow-lg ring-1 ring-black/5
+        border-1 border-gray-400 w-3/6  h-auto 
         flex items-center justify-center flex-col gap-3
-        px-5 py-7 rounded-3xl"
+        px-5 py-7 "
       >
         <div className="w-full">
           <label className="text-3xl   " htmlFor="email">
