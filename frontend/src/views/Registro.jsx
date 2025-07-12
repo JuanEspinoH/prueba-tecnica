@@ -67,7 +67,11 @@ const Registro = () => {
 
   if (loading) {
     return (
-      <div className=" w-full h-[100vh] flex items-center justify-center flex-col gap-3">
+      <div
+        className="
+      bg-gradient-to-r from-indigo-400 to-cyan-400
+      w-full h-[100vh] flex items-center justify-center flex-col gap-3"
+      >
         <Spinner />
         <p className="text-3xl font-bold text-blue-700">Creando usuario</p>
       </div>
@@ -75,15 +79,21 @@ const Registro = () => {
   }
 
   return (
-    <div className=" w-full h-[100vh] flex items-center justify-center flex-col gap-3">
-      <h1 className="text-6xl text-blue-600">Tareas React-Flask</h1>
+    <div
+      className="
+    bg-gradient-to-r from-indigo-400 to-cyan-400
+    w-full h-[100vh] flex items-center justify-center flex-col gap-3"
+    >
+      <h1 className="text-6xl font-extrabold text-white">Tareas React-Flask</h1>
       <h3 className="text-4xl">Registra tu cuenta</h3>
 
       <form
         onSubmit={handleSubmit}
-        className="border-1 border-gray-400 w-3/6 shadow-[0px_8px_0px_0px_rgba(0,_0,_0,_0.2)] h-auto 
+        className="
+        isolate    rounded-xl bg-white/60 shadow-lg ring-1 ring-black/5
+        border-1 border-gray-400 w-3/6  h-auto 
         flex items-center justify-center flex-col gap-3
-        px-5 py-7 rounded-3xl"
+        px-5 py-7 "
       >
         <div className="w-full">
           <label className="text-3xl   " htmlFor="username">
@@ -125,7 +135,7 @@ const Registro = () => {
           />
         </div>
         <button
-          className="text-2xl text-center w-full bg-blue-500 p-1.5 text-white"
+          className="text-2xl text-center w-full bg-blue-500 p-1.5 text-white cursor-pointer"
           type="submit"
         >
           Submit

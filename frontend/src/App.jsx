@@ -14,7 +14,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <GlobalStoreaProvider>
-        <div>
+        <div className="h-[100vh]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/registro" element={<Registro />} />

@@ -8,14 +8,9 @@ import DeleteIcon from './DeleteIcon'
 import Spinner from './Spinner'
 
 const TaskContainer = ({ id, label, completed, setTasks }) => {
-  //   if (id == 2) {
-  //     console.log(completed, 'args--------------')
-  //   }
-  const { store, actions } = useGlobalStore()
+  const { _, actions } = useGlobalStore()
   const [loading, setLoading] = useState(false)
   const [edit, setEdit] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const [labelData, setLabelData] = useState(label)
   const [completedData, setCompletedData] = useState(completed)
   const [completedDataFlag, setCompletedDataFlag] = useState(false)
@@ -81,7 +76,11 @@ const TaskContainer = ({ id, label, completed, setTasks }) => {
   }
 
   return (
-    <div className="p-5  gap-2 flex items-center justify-center flex-col w-full shadow-[0px_8px_0px_0px_rgba(0,_0,_0,_0.2)] border-2 border-gray-400 rounded-2xl h-32">
+    <div
+      className="
+    isolate   rounded-xl bg-white/20 shadow-lg ring-1 ring-black/5
+    p-5  gap-2 flex items-center justify-center flex-col w-full  border-2 border-gray-400  h-32"
+    >
       <div className="w-full  h-20 flex justify-between items-center flex-row ">
         <input
           disabled={edit ? false : true}
@@ -101,15 +100,15 @@ const TaskContainer = ({ id, label, completed, setTasks }) => {
         )}
       </div>
 
-      <div className=" w-full flex  justify-between items-center">
+      <div className="w-full flex group justify-between items-center">
         <button
           onClick={() => {
             handleChangeCompleted()
           }}
           className={
             completedData
-              ? 'w-3/12 rounded-sm p-1 bg-green-500 flex  justify-center items-center cursor-pointer'
-              : 'w-3/12 rounded-sm p-1 bg-gray-500 flex  justify-center items-center cursor-pointer '
+              ? 'w-3/12 rounded-sm p-1  bg-green-500 flex  justify-center items-center cursor-pointer'
+              : 'w-3/12 rounded-sm p-1  bg-gray-500 flex   justify-center items-center cursor-pointer '
           }
         >
           {completedData ? <CheckIcon /> : <CrossIcon />}

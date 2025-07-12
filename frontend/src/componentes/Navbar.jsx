@@ -1,6 +1,8 @@
 import React from 'react'
 import useGlobalStore from '../context/useGlobalStore'
 import { useNavigate } from 'react-router-dom'
+import GearIcon from './GearIcon'
+
 const Navbar = () => {
   const navigate = useNavigate()
   const { store, actions } = useGlobalStore()
@@ -10,10 +12,19 @@ const Navbar = () => {
     navigate('/inicio-sesion')
   }
   return (
-    <nav className="w-full flex justify-between items-center bg-blue-900 py-3 px-4 ">
-      <p className="text-white text-3xl">{`Tareas de ${store.currentUser.username}`}</p>
+    <nav
+      className="
+    bg-gradient-to-r from-indigo-700 to-blue-700
+    border-b-2 border-indigo-800
+    mb-4
+    w-full flex justify-between items-center  py-3 px-4 "
+    >
+      <div className="flex justify-center items-center gap-3 flex-row">
+        <p className="text-white font-extrabold text-3xl">{`Tareas de ${store.currentUser.username}`}</p>
+        {/* <GearIcon /> */}
+      </div>
       <button
-        className="bg-white text-blue-900 p-3"
+        className="bg-white text-blue-900 cursor-pointer rounded-md p-3"
         onClick={() => handleLogOut()}
       >
         Log out

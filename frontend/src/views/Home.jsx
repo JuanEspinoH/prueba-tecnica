@@ -64,35 +64,40 @@ const Home = () => {
 
   if (loading) {
     return (
-      <main className=" w-full  h-[100vh] flex items-center justify-center flex-col gap-2">
+      <main className="bg-gradient-to-r from-slate-800 to-indigo-600 w-full  h-[100vh] flex items-center justify-center flex-col gap-2">
         <Spinner />
-        <p className="text-3xl font-bold text-blue-700">Cargando tareas</p>
+        <p className="text-3xl font-bold  text-white">Cargando tareas</p>
       </main>
     )
   }
 
   return (
-    <main className="">
+    <main className="bg-gradient-to-r from-indigo-500 to-blue-500 min-h-[100vh] ">
       <Navbar />
-      <div className=" px-4 mb-2 pb-2 gap-3 flex items-center justify-center flex-col">
-        <h2 className="text-4xl">Crear nota</h2>
+      <div className=" px-4 mb-2 pb-2 gap-5 flex items-center justify-center flex-col">
+        <h1 className="text-5xl font-extrabold text-white">Crear nota</h1>
         <form
           onSubmit={onSubmit}
-          className=" w-[95%] p-3 rounded-2xl shadow-[0px_8px_0px_0px_rgba(0,_0,_0,_0.2)]   border-2 border-gray-400  "
+          className=" 
+          isolate   rounded-xl bg-white/20 shadow-lg ring-1 ring-black/5
+          w-[95%] p-3     border-2 border-gray-400  "
         >
           <div className="">
-            <label className="font-bold" htmlFor="label">
+            <label className="font-bold text-3xl" htmlFor="label">
               Escribe tu tarea:
             </label>
             <input
-              className="w-full h-7 my-2 bg-gray-300 p-2 font-bold"
+              className="w-full h-7 text-2xl my-2 bg-gray-300 p-5 font-bold"
               id="label"
               type="text"
               onChange={(e) => setTarea(e.target.value)}
               value={tarea}
             />
           </div>
-          <button className="w-full bg-blue-900 text-white" type="submit">
+          <button
+            className="w-full cursor-pointer hover:bg-blue-700 rounded-md p-2 text-2xl font-bold bg-blue-900 text-white"
+            type="submit"
+          >
             Enviar
           </button>
         </form>
@@ -105,7 +110,7 @@ const Home = () => {
               <TaskContainer key={t.id} {...t} setTasks={setTasks} />
             ))
           ) : (
-            <p>No hay mensajes</p>
+            <p className="text-white text-3xl">No hay mensajes</p>
           )}
         </div>
       </div>
